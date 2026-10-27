@@ -1,48 +1,29 @@
-# Opia Python ML 🚀
+# Despliegue de la Aplicación
 
-Proyecto de Machine Learning desarrollado en Python enfocado en el entrenamiento, evaluación y despliegue de modelos predictivos de regresión (utilizando el dataset *California Housing* / scikit-learn) a través de una API REST con FastAPI.
+A continuación se documentan los pasos seguidos para el despliegue del proyecto en la plataforma Render y la sincronización con el repositorio.
 
----
+## 1. Creación de la cuenta
+- Se accedió a la plataforma en la nube [Render](https://render.com/).
+- Se hizo clic en el botón de registro (**Sign Up**).
+- Se seleccionó la opción de registro mediante **GitHub** para vincular ambas cuentas. Esto autoriza a Render a acceder a los repositorios de GitHub sin necesidad de configurar claves SSH adicionales.
 
-## 📌 Tabla de Contenidos
+## 2. Configuración del repositorio
+- Dentro del panel de control de Render, se seleccionó **New** > **Web Service**.
+- Se eligió la opción **Build and deploy from a Git repository**.
+- Se buscó y seleccionó el repositorio del proyecto: `bobynicolae59-ship-it/opia-python-ml`.
+- Se rellenaron los detalles del despliegue:
+  - **Name:** `opia-python-ml`
+  - **Region:** Frankfurt (EU Central)
+  - **Branch:** `main`
+  - **Runtime:** `Python 3`
+  - **Plan:** `Free`
 
-- [Descripción General](#-descripción-general)
-- [Arquitectura y Estructura](#-arquitectura-y-estructura)
-- [Stack Tecnológico](#-stack-tecnológico)
-- [Requisitos Previos](#-requisitos-previos)
-- [Instalación y Configuración](#-instalación-y-configuración)
-- [Uso y Ejecución](#-uso-y-ejecución)
-  - [1. Entrenamiento del Modelo](#1-entrenamiento-del-modelo)
-  - [2. Despliegue de la API](#2-despliegue-de-la-api)
-- [Endpoints de la API](#-endpoints-de-la-api)
-- [Despliegue en la Nube (Render / Cloud)](#-despliegue-en-la-nube-render--cloud)
-- [Licencia](#-licencia)
+## 3. Comando de despliegue
+Para que la plataforma instale las dependencias y arranque la aplicación FastAPI, se introdujeron los siguientes comandos en la configuración del servicio:
+- **Build Command:** `pip install -r requirements.txt`
+- **Start Command:** `uvicorn src.app:app --host 0.0.0.0 --port $PORT`
 
----
-
-## 📖 Descripción General
-
-Este repositorio contiene el pipeline completo de machine learning:
-1. **Extracción y Preprocesamiento:** Carga de datos, limpieza, escalado de variables y división entrenamiento/test (`train_test_split`).
-2. **Modelado y Evaluación:** Ajuste de algoritmos de regresión (Árboles de Decisión / Random Forest / Regresión Lineal) y evaluación mediante métricas estándar ($R^2$, RMSE, MAE).
-3. **Serialización:** Exportación del modelo entrenado y transformadores mediante `joblib`.
-4. **Servicio Web (Inferencia):** API creada con **FastAPI** que expone endpoints para realizar predicciones en tiempo real a partir de cargas útiles JSON.
-
----
-
-## 📂 Arquitectura y Estructura
-
-```text
-opia-python-ml/
-├── data/                  # Datasets locales o procesados (opcional)
-├── models/                # Artefactos del modelo serializado (.joblib / .pkl)
-│   └── model.joblib
-├── notebooks/             # Exploración y visualización inicial (Jupyter/EDA)
-├── src/                   # Código fuente principal
-│   ├── __init__.py
-│   ├── train.py           # Pipeline de entrenamiento y exportación
-│   ├── predict.py         # Lógica de carga del modelo e inferencia
-│   └── app.py             # Definición de la API con FastAPI
-├── requirements.txt       # Dependencias del proyecto
-├── .gitignore
-└── README.md
+## 4. URL final
+Tras terminar el proceso de compilación y despliegue (estado *Live*), la API quedó publicada y accesible en la siguiente dirección web:
+- **URL de la aplicación:** https://opia-python-ml-9jhx.onrender.com
+- **URL de GitHub:** https://github.com/bobynicolae59-ship-it/opia-python-ml
