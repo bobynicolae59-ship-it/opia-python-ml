@@ -2,6 +2,8 @@
 
 A continuación se documentan los pasos seguidos para el despliegue del proyecto en la plataforma Render y la sincronización con el repositorio.
 
+Autores: Javier Martín Bosque, Nicolae Poenaru
+
 ## 1. Creación de la cuenta
 - Se accedió a la plataforma en la nube [Render](https://render.com/).
 - Se hizo clic en el botón de registro (**Sign Up**).
