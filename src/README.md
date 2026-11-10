@@ -29,3 +29,29 @@ Para que la plataforma instale las dependencias y arranque la aplicación FastAP
 Tras terminar el proceso de compilación y despliegue (estado *Live*), la API quedó publicada y accesible en la siguiente dirección web:
 - **URL de la aplicación:** https://opia-python-ml-9jhx.onrender.com
 - **URL de GitHub:** https://github.com/bobynicolae59-ship-it/opia-python-ml
+
+## 5. Documentación de la API de Predicción (California Housing)
+
+## Descripción general
+La API cuenta con un endpoint principal para realizar estimaciones del precio medio de viviendas utilizando el modelo de Machine Learning entrenado.
+
+## Ejemplo de Petición (Request)
+```json
+{
+  "MedInc": 4.7,
+  "HouseAge": 25.0,
+  "AveRooms": 5.2,
+  "AveBedrms": 1.0,
+  "Population": 1200.0,
+  "AveOccup": 3.0,
+  "Latitude": 37.88,
+  "Longitude": -122.23
+}
+```
+
+## Ejemplo de Respuesta (Response)
+```json
+{
+  "med_house_val": 1.76159
+}
+```
