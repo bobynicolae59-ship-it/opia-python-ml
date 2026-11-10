@@ -3,7 +3,7 @@
 Completa SOLO las partes marcadas con TODO (del 0 al 6; el 5 tiene subapartados
 a y b). El resto ya está hecho.
 Este es el único fichero de código que tienes que completar (además del README).
-Autores: <nombre1>, <nombre2>
+Autores: Nicolae Poenaru, Javier Martín Bosque
 
 Qué hace la app: el usuario introduce 2 variables (ingreso medio y número de
 habitaciones); la app completa el resto con valores por defecto, comprueba que
@@ -62,8 +62,10 @@ AUTORES = "<nombre1>, <nombre2>"
 # Por defecto la app usa la API en local. Antes de desplegar en Render,
 # sustituye <tu-servicio-api> por el nombre de tu servicio, comenta la línea
 # de localhost y descomenta la de Render: es la que usará la app desplegada.
-API_URL = "http://localhost:8000"
+# API_URL = "http://localhost:8000"
 # API_URL = "https://<tu-servicio-api>.onrender.com"
+API_URL = # API_URL = "http://localhost:8000"
+API_URL = "https://opia-python-ml-9jhx.onrender.com"
 # Segundos de espera. Con dos servicios dormidos en Render (la API y esta app),
 # el arranque en frío puede tardar más de un minuto.
 TIMEOUT = 90
@@ -94,8 +96,13 @@ def find_missing(payload: dict) -> list[str]:
     Pista: recorre FEATURE_NAMES y comprueba `payload.get(nombre) is None`.
     Ojo: no uses `if not valor`, porque 0.0 es un valor válido.
     """
-    raise NotImplementedError("Completa el TODO 2: find_missing()")
-
+    #raise NotImplementedError("Completa el TODO 2: find_missing()")
+    
+    faltantes = []
+    for nombre in FEATURE_NAMES:
+        if payload.get(nombre) is None:
+            faltantes.append(nombre)
+    return faltantes
 
 def format_price(med_house_val: float) -> str:
     """Convierte la salida del modelo a un texto legible en dólares.
@@ -105,8 +112,10 @@ def format_price(med_house_val: float) -> str:
     Pistas: multiplica por 100_000; para el texto usa un f-string con el
     formato de miles de Python, f"${precio:,.0f}".
     """
-    raise NotImplementedError("Completa el TODO 3: format_price()")
+    #raise NotImplementedError("Completa el TODO 3: format_price()")
 
+    precio_dolares = med_house_val *100000
+    return f"${precio_dolares:,.0f}"
 
 # ---------------------------------------------------------------- Interfaz --
 st.set_page_config(page_title="Precio de casas en California")
@@ -128,7 +137,13 @@ med_inc = st.number_input(
 )
 # Hasta que completes el TODO 6, AveRooms usa un valor por defecto fijo
 # (mediana aproximada del dataset), así la petición lleva las 8 variables.
-ave_rooms = 5.2
+# ave_rooms = 5.2
+
+ave_rooms = st.number_input(
+    "Número medio de habitantes por vivienda",
+    min_value=1.0, max_value=15.0, value=5.2, step=0.1
+)
+
 # TODO 6 (apartado d): sustituye el valor fijo de arriba por un campo de entrada
 # para el número de habitaciones: asigna a `ave_rooms` un st.number_input,
 # copiando el de ingreso medio, con
@@ -167,21 +182,25 @@ if st.button("Estimar precio"):
             # petición POST al endpoint /predict y guarda la respuesta en
             # `response`. Pista: requests.post(api_url + "/predict",
             # json=payload, timeout=TIMEOUT). Borra la línea de abajo.
-            raise NotImplementedError("Completa el TODO 1: la petición POST")
+            # raise NotImplementedError("Completa el TODO 1: la petición POST")
+            response = requests.post(api_url + "/predict", json=payload, timeout=TIMEOUT)
         elapsed_ms = (time.perf_counter() - start) * 1000
     except requests.RequestException as exc:
         logger.error("Fallo de comunicación con %s: %s", api_url, exc)
         # TODO 5a (apartado e): sustituye el mensaje por uno claro para el
         # usuario (qué ha pasado y qué puede hacer). Este único except cubre
         # cualquier fallo de comunicación (sin conexión, timeout...).
-        st.error("TODO 5a: no se pudo contactar con la API.")
+        # st.error("TODO 5a: no se pudo contactar con la API.")
+        st.error("No se ha podido conectar con el servicio de IA. Comprueba tu conexión a internet o verifica que la URL de la API es correcta y el servicio está activo.")
     else:
         logger.info("POST %s/predict -> HTTP %s en %.0f ms", api_url, response.status_code, elapsed_ms)
         if response.status_code == 200:
             med_house_val = response.json()["MedHouseVal"]
             # Valor SIN formatear (cientos de miles de $), para poder probar la
             # app antes de hacer el apartado c.
-            st.metric("Valor devuelto por la API (sin formatear)", med_house_val)
+            # st.metric("Valor devuelto por la API (sin formatear)", med_house_val)
+            st.metric("Precio estimado", format_price(med_house_val))
+            st.caption(f"(Valor devuelto por la API sin formatear: {med_house_val})")
             # TODO 4 (apartados c y d): muestra el precio ya formateado.
             # Pista: sustituye la línea st.metric de arriba por
             # st.metric("Precio estimado", format_price(med_house_val))
@@ -192,4 +211,5 @@ if st.button("Estimar precio"):
             # cualquier código distinto de 200 (422, 500...): indica el código
             # y el detalle con response.text (no llames a response.json():
             # en un 500 el cuerpo NO es JSON). Borra la línea de abajo.
-            raise NotImplementedError("Completa el TODO 5b: respuesta de error")
+            # raise NotImplementedError("Completa el TODO 5b: respuesta de error")
+            st.error(f"Error de la API (Código {response.status_code}): {response.text}")
