@@ -6,4 +6,5 @@ requests
 joblib
 scikit-learn
 gunicorn
+streamlit
 
